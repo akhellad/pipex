@@ -8,12 +8,14 @@
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <string.h>
+#include <stdio.h>
 
 # define ERR_INFILE "Infile"
 # define ERR_OUTFILE "Outfile"
 # define ERR_INPUT "Invalid number of arguments.\n"
 # define ERR_PIPE "Pipe"
 # define ERR_CMD "Command not found\n"
+# define PATH "/usr/bin/"
 
 typedef struct s_child
 {
@@ -36,5 +38,10 @@ char	**ft_split(char const *s, char c);
 char	*ft_strdup(const char *src);
 int	    ft_strcmp(char *s1, char *s2);
 size_t	ft_strlen(const char *str);
+void    first_child(t_pipe *pipex);
+void    second_child(t_pipe *pipex);
+int     w_msg(char *err_msg);
+void	w_error_msg(char *err_msg);
+void    free_child(t_pipe *pipex);
 
 #endif
