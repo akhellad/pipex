@@ -19,7 +19,6 @@
 
 typedef struct s_child
 {
-    char    *path;
     char    **arg;
     int     file;
 } t_child;
@@ -31,6 +30,9 @@ typedef struct s_pipe
     int     fd[2];
     t_child child1;
     t_child child2;
+    char    *path_line;
+    char    **paths;
+    char    *cmd;
 } t_pipe;
 
 char	*ft_strjoin(char const *s1, char const *s2);
@@ -38,10 +40,14 @@ char	**ft_split(char const *s, char c);
 char	*ft_strdup(const char *src);
 int	    ft_strcmp(char *s1, char *s2);
 size_t	ft_strlen(const char *str);
-void    first_child(t_pipe *pipex);
-void    second_child(t_pipe *pipex);
+void    first_child(int argc, char **argv, char *envp[], t_pipe *pipex);
+void    second_child(int argc, char **argv, char *envp[], t_pipe *pipex);
 int     w_msg(char *err_msg);
 void	w_error_msg(char *err_msg);
-void    free_child(t_pipe *pipex);
+void    free_child1(t_pipe *pipex);
+void    free_child2(t_pipe *pipex);
+int     ft_strncmp(char *s1, char *s2, unsigned int n);
+char    *find_path_line(char *envp[]);
+void    free_parent(t_pipe *pipex);
 
 #endif

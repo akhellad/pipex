@@ -1,44 +1,60 @@
 #include "../includes/pipex.h"
 
+void check_leaks();
+
+int	ft_strncmp(char *s1, char *s2, unsigned int n)
+{
+	unsigned int	i;
+
+	i = 0;
+	while ((s1[i] || s2[i]) && i < n)
+	{
+		if (s1[i] == s2[i])
+			i ++;
+		else
+			return (1);
+	}
+	return (0);
+}
+
+char *find_path_line(char *envp[])
+{
+    while (ft_strncmp("PATH", *envp, 4))
+        envp ++;
+    return (*envp + 5); 
+}
+
 void open_files(int argc, char **argv, t_pipe *p)
 {
     p->child1.file = open(argv[1], O_RDONLY, 0777);
     if (p->child1.file < 0)
         w_error_msg(ERR_INFILE);
-    p->child2.file = open(argv[argc - 1], O_WRONLY, 0777);
+    p->child2.file = open(argv[argc - 1], O_WRONLY | O_CREAT, 0777);
     if (p->child2.file < 0)
         w_error_msg(ERR_OUTFILE);
 }
 
-void    init_struct(int argc, char **argv, t_pipe *p)
-{
-    open_files(argc, argv, p);
-    p->child1.arg = ft_split(argv[2], ' ');
-    p->child1.arg[0] = ft_strjoin(PATH, p->child1.arg[0]);
-    p->child1.path = ft_strdup(p->child1.arg[0]);
-    p->child2.arg = ft_split(argv[3], ' ');
-    p->child2.arg[0] = ft_strjoin(PATH, p->child2.arg[0]);
-    p->child2.path = ft_strdup(p->child2.arg[0]);
-}
-
-int main(int argc, char* argv[])
+int main(int argc, char *argv[], char *envp[])
 {
     t_pipe pipex;
     if (argc != 5)
         return(w_msg(ERR_INPUT)); 
-    init_struct(argc, argv, &pipex);
+    open_files(argc, argv, &pipex);
+    pipex.path_line = find_path_line(envp);
+    pipex.paths = ft_split(pipex.path_line, ':');
     if (pipe(pipex.fd) < 0) 
         w_error_msg(ERR_PIPE);    
     pipex.pid1 = fork(); 
     if (pipex.pid1 == 0) 
-        first_child(&pipex);    
+        first_child(argc, argv, envp, &pipex);    
     pipex.pid2 = fork();
     if (pipex.pid2 == 0)
-        second_child(&pipex);
+        second_child(argc, argv, envp, &pipex);
     close(pipex.fd[0]);
     close(pipex.fd[1]);   
     waitpid(pipex.pid1, NULL, 0);
     waitpid(pipex.pid2, NULL, 0);
-    free_child(&pipex);
+    free_parent(&pipex);
+    check_leaks();
     return (0);
 }

@@ -10,12 +10,13 @@ SRC		=	pipex.c \
 			ft_split.c \
 			childs.c \
 			w_error.c \
-			free.c
+			free.c \
+			leak_checker_ex.c
 
 OBJ		= 	$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	-Wall -Wextra -Werror -g3
 
 
 all: obj ${NAME}
