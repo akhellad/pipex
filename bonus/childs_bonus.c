@@ -17,36 +17,32 @@ static char *get_path(char *command, char **paths)
     return (NULL);
 }
 
-void    first_child(int argc, char **argv, char *envp[], t_pipe *pipex)
+static void	change_std(int zero, int first)
 {
-    (void)argc;
-    dup2(pipex->fd[1], STDOUT_FILENO);
-    close(pipex->fd[0]);
-    dup2(pipex->child1.file, STDIN_FILENO);
-    pipex->child1.arg = ft_split(argv[2], ' ');
-    pipex->cmd = get_path(pipex->child1.arg[0], pipex->paths);
-    if (!pipex->cmd)
-    {
-        free_child1(pipex);
-        w_msg(ERR_CMD);
-        exit(1);
-    }
-    execve(pipex->cmd, pipex->child1.arg, envp);
+	dup2(zero, 0);
+	dup2(first, 1);
 }
 
-void    second_child(int argc, char **argv, char *envp[], t_pipe *pipex)
+void    child(char **argv, char *envp[], t_pipe *pipex)
 {
-    (void)argc;
-    dup2(pipex->fd[0], STDIN_FILENO);
-    close(pipex->fd[1]);
-    dup2(pipex->child2.file, STDOUT_FILENO);
-    pipex->child2.arg = ft_split(argv[3], ' ');
-    pipex->cmd = get_path(pipex->child2.arg[0], pipex->paths);
+    pipex->pid = fork();
+    if (pipex->pid == 0)
+    {
+        if (pipex->pipe_pos == 0)
+            change_std(pipex->infile, pipex->pipe[1]);
+        else if (pipex->pipe_pos == pipex->nb_cmd - 1)
+            change_std(pipex->pipe[2 * pipex->pipe_pos - 2], pipex->outfile);
+        else
+            change_std(pipex->pipe[2 * pipex->pipe_pos - 2], pipex->pipe[2 * pipex->pipe_pos + 1]);
+    close_pipes(pipex);
+    pipex->arg = ft_split(argv[2 + pipex->here_doc + pipex->pipe_pos], ' ');
+    pipex->cmd = get_path(pipex->arg[0], pipex->paths);
     if (!pipex->cmd)
     {
-        free_child2(pipex);
+        free_child(pipex);
         w_msg(ERR_CMD);
         exit(1);
     }
-    execve(pipex->cmd, pipex->child2.arg, envp);
+    execve(pipex->cmd, pipex->arg, envp);
+    }
 }

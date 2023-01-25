@@ -28,15 +28,16 @@ void	here_doc(char *av, t_pipe *pipex)
 	{
 		write(1, "pipe heredoc>", 13);
 		buff = get_next_line(0);
-		write(tmp_file, buff, ft_strlen(buff));
-		write(tmp_file, "\n", 2);
-		if (ft_strcmp(av, buff))
+		if (buff < 0)
+			exit (1);
+		if (!ft_strncmp(av, buff, ft_strlen(av)))
 			break ;
+		write(tmp_file, buff, ft_strlen(buff));
 		free(buff);
 	}
 	free(buff);
 	close(tmp_file);
-	pipex->child1.file = open(".here_doc", O_RDONLY, 0777);
-	if (pipex->child1.file < 0)
+	pipex->infile = open(".here_doc", O_RDONLY, 0777);
+	if (pipex->infile < 0)
 		w_error_msg(ERR_HEREDOC);
 }

@@ -22,10 +22,9 @@ BONUSSRC = 	pipex_bonus.c \
 			childs_bonus.c \
 			w_error_bonus.c \
 			free_bonus.c \
-			leak_checker_ex.c \
 			get_next_line.c \
 			get_next_line_utils.c \
-			here_doc \
+			here_doc.c \
 
 OBJ		= 	$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 BONUSOBJ =  $(addprefix $(BONOBJDIR)/,$(BONUSSRC:.c=.o))
@@ -48,7 +47,7 @@ ${OBJDIR}/%.o:${SRCDIR}/%.c
 
 ${BONOBJDIR}/%.o:${BONDIR}/%.c
 	@echo "\033[33;32m[OK] \033[0m       \033[0;33m Compiling:\033[0m" $<
-	$(CC) ${CFLAGS} -I ${BINCDIR} -o $@ -c $<
+	@$(CC) ${CFLAGS} -I ${BINCDIR} -o $@ -c $<
 
 $(NAME): $(OBJ)
 	@echo "\033[0;34m[OK] \033[0m       \033[0;33m Created  \033[0m:" $<
@@ -63,6 +62,7 @@ clean:
 	@echo "\033[0;31m[OK] \033[0m       \033[0;33m Deleted  \033[0m: $(OBJDIR)" $<
 	@rm -rf $(OBJDIR)
 	@rm -rf $(BONOBJDIR)
+	@rm -rf .here_doc
 
 fclean: clean
 	@echo "\033[0;31m[OK] \033[0m       \033[0;33m Deleted  \033[0m: ${NAME}"
