@@ -28,8 +28,6 @@ void	here_doc(char *av, t_pipe *pipex)
 	{
 		write(1, "pipe heredoc>", 13);
 		buff = get_next_line(0);
-		if (buff < 0)
-			exit (1);
 		if (!ft_strncmp(av, buff, ft_strlen(av)))
 			break ;
 		write(tmp_file, buff, ft_strlen(buff));

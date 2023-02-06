@@ -1,7 +1,5 @@
 #include "../includes/pipex.h"
 
-void check_leaks();
-
 int	ft_strncmp(char *s1, char *s2, unsigned int n)
 {
 	unsigned int	i;
@@ -17,6 +15,19 @@ int	ft_strncmp(char *s1, char *s2, unsigned int n)
 	return (0);
 }
 
+static void create_pipes(t_pipe *pipex)
+{
+    int i;
+
+    i = 0;
+    while (i < pipex->nb_cmd - 1)
+    {
+        if (pipe(pipex->pipe + 2 * i) < 0)
+            free_parent(pipex);
+        i ++;
+    }
+}
+
 char *find_path_line(char *envp[])
 {
     while (ft_strncmp("PATH", *envp, 4))
@@ -26,12 +37,24 @@ char *find_path_line(char *envp[])
 
 void open_files(int argc, char **argv, t_pipe *p)
 {
-    p->child1.file = open(argv[1], O_RDONLY, 0777);
-    if (p->child1.file < 0)
+    p->infile = open(argv[1], O_RDONLY, 0777);
+    if (p->infile < 0)
         w_error_msg(ERR_INFILE);
-    p->child2.file = open(argv[argc - 1], O_WRONLY | O_CREAT, 0777);
-    if (p->child2.file < 0)
+    p->outfile = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0000644);
+    if (p->outfile < 0)
         w_error_msg(ERR_OUTFILE);
+}
+
+void	close_pipes(t_pipe *pipex)
+{
+	int	i;
+
+	i = 0;
+	while (i < (pipex->nb_pipe))
+	{
+		close(pipex->pipe[i]);
+		i++;
+	}
 }
 
 int main(int argc, char *argv[], char *envp[])
@@ -40,21 +63,22 @@ int main(int argc, char *argv[], char *envp[])
     if (argc != 5)
         return(w_msg(ERR_INPUT)); 
     open_files(argc, argv, &pipex);
+    pipex.nb_cmd = argc - 3;
+    pipex.nb_pipe = 2 * (pipex.nb_cmd - 1);
+    pipex.pipe = malloc(sizeof(int) * pipex.nb_pipe);
+    if (!pipex.pipe)
+        w_error_msg(ERR_PIPE);
     pipex.path_line = find_path_line(envp);
     pipex.paths = ft_split(pipex.path_line, ':');
-    if (pipe(pipex.fd) < 0) 
-        w_error_msg(ERR_PIPE);    
-    pipex.pid1 = fork(); 
-    if (pipex.pid1 == 0) 
-        first_child(argc, argv, envp, &pipex);    
-    pipex.pid2 = fork();
-    if (pipex.pid2 == 0)
-        second_child(argc, argv, envp, &pipex);
-    close(pipex.fd[0]);
-    close(pipex.fd[1]);   
-    waitpid(pipex.pid1, NULL, 0);
-    waitpid(pipex.pid2, NULL, 0);
+    if (!pipex.paths)
+        pipe_free(&pipex);
+    create_pipes(&pipex);
+    pipex.pipe_pos = -1;
+    while(++(pipex.pipe_pos) < pipex.nb_cmd)
+        child(argv, envp, &pipex);
+    close_pipes(&pipex);
+    waitpid(-1, NULL, 0);
     free_parent(&pipex);
-    check_leaks();
+    return (0);
     return (0);
 }

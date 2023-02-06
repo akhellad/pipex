@@ -14,7 +14,6 @@ SRC		=	pipex.c \
 			childs.c \
 			w_error.c \
 			free.c \
-			leak_checker_ex.c \
 
 BONUSSRC = 	pipex_bonus.c \
 			utils_bonus.c \
