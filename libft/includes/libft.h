@@ -6,7 +6,7 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 15:59:50 by akhellad          #+#    #+#             */
-/*   Updated: 2023/02/16 16:21:15 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/06/01 14:04:02 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
+# include <fcntl.h>
+# include <stdlib.h>
+# include <stdio.h>
 
 typedef struct s_list
 {
@@ -67,5 +70,6 @@ void	ft_putendl_fd(char *s, int fd);
 char	**ft_split(char const *s, char c);
 void	ft_putstr_fd(char *s, int fd);
 size_t	ft_strlen(const char *str);
+int 	get_next_line(char **line);
 
 #endif

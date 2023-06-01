@@ -6,12 +6,11 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 14:25:22 by akhellad          #+#    #+#             */
-/*   Updated: 2023/02/15 18:23:55 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:20:56 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
 
 size_t	ft_strlen(const char *str)
 {

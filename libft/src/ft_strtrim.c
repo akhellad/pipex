@@ -6,12 +6,11 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 13:57:36 by akhellad          #+#    #+#             */
-/*   Updated: 2023/02/15 18:23:55 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:21:02 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
 
 int	ft_end(char const *s1, char const *set)
 {

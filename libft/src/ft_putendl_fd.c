@@ -6,12 +6,11 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 15:24:41 by akhellad          #+#    #+#             */
-/*   Updated: 2023/02/15 18:23:55 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:19:46 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
 
 void	ft_putendl_fd(char *s, int fd)
 {

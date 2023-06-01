@@ -6,12 +6,11 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 08:46:16 by akhellad          #+#    #+#             */
-/*   Updated: 2023/02/15 18:23:55 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:18:50 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
 
 int	ft_atoi2(const char *nptr1, long int fin, long int neg)
 {

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/01 13:20:05 by akhellad          #+#    #+#             */
+/*   Updated: 2023/06/01 14:06:25 by akhellad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/pipex.h"
 
 void	child_process(char **argv, char **envp, int *fd)
@@ -45,8 +57,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	else
 	{
-		ft_putstr_fd("\033[31mError: Bad arguments\n\e[0m", 2);
-		ft_putstr_fd("Ex: ./pipex <file1> <cmd1> <cmd2> <file2>\n", 1);
+		ft_putstr_fd("Bad arguments. Ex: ./pipex file1 cmd1 cmd2 file2\n", 1);
 	}
 	return (0);
 }
