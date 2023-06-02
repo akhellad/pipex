@@ -6,7 +6,7 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 13:20:11 by akhellad          #+#    #+#             */
-/*   Updated: 2023/06/01 14:10:37 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/06/02 11:27:16 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 void	usage(void)
 {
-	ft_putstr_fd("Bad arguments. Ex: ./pipex <file1> <cmd1> <cmd2> <...> <file2>\n", 1);
-	ft_putstr_fd("    ./pipex \"here_doc\" <LIMITER> <cmd> <cmd1> <...> <file>\n", 1);
+	ft_putstr_fd("Bad arguments.\n", 1);
+	ft_putstr_fd("Exemple: ./pipex <file1> <cmd1> <cmd2> <...> <file2>\n", 1);
+	ft_putstr_fd("Or: ./pipex \"here_doc\" <LIMITER> <cmd> <cmd1>\
+				 <...> <file>\n", 1);
 	exit(EXIT_SUCCESS);
 }
 

@@ -6,7 +6,7 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 10:26:01 by gcollet           #+#    #+#             */
-/*   Updated: 2023/06/01 14:11:14 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/06/02 11:18:17 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ void	error(void)
 void	execute(char *argv, char **envp)
 {
 	char	**cmd;
-	int 	i;
+	int		i;
 	char	*path;
-	
+
 	i = -1;
 	cmd = ft_split(argv, ' ');
 	path = find_path(cmd[0], envp);
-	if (!path)	
+	if (!path)
 	{
 		while (cmd[++i])
 			free(cmd[i]);
@@ -66,4 +66,3 @@ void	execute(char *argv, char **envp)
 	if (execve(path, cmd, envp) == -1)
 		error();
 }
-

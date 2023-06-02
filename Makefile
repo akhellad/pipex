@@ -6,7 +6,7 @@
 #    By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/01 15:40:17 by akhellad          #+#    #+#              #
-#    Updated: 2023/06/01 15:40:36 by akhellad         ###   ########.fr        #
+#    Updated: 2023/06/02 13:45:58 by akhellad         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ OBJS_B	= ${SRCS_B:.c=.o}
 HEADER	= -Iincludes
 
 CC 		= gcc
-CFLAGS 	= -Wall -Wextra -Werror -g
+CFLAGS 	= -Wall -Wextra -Werror -g3
 
 .c.o:		%.o : %.c
 					@echo "\033[33;32m[OK] \033[0m       \033[0;33m Compiling:\033[0m" $<
@@ -58,7 +58,6 @@ fclean: 	clean
 
 re:			fclean all
 
-re_bonus:	fclean bonus
-
+re_bonus:	fclean re_bonus
 
 .PHONY: all clean fclean re re_bonus bonus

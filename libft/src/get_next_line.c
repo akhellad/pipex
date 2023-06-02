@@ -6,7 +6,7 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 07:05:20 by akhellad          #+#    #+#             */
-/*   Updated: 2023/06/01 15:29:52 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/06/02 11:21:13 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,60 +31,56 @@ static int	expand_buffer(char **buffer, int buffer_size, int *buffer_capacity)
 		if (temp == NULL)
 			return (-1);
 		i = -1;
-        while (++i < buffer_size)
-            temp[i] = (*buffer)[i];
-        free(*buffer);
-        *buffer = temp;
-    }
-    return 0;
+		while (++i < buffer_size)
+			temp[i] = (*buffer)[i];
+		free(*buffer);
+		*buffer = temp;
+	}
+	return (0);
 }
 
-static int fill_buffer(char **buffer, int *buffer_size, int *buffer_capacity)
+static int	fill_buffer(char **buffer, int *buffer_size, int *buffer_capacity)
 {
-    char c;
-    int r;
-    r = read_character(&c);
+	char	c;
+	int		r;
 
-    while (r > 0 && c != '\n' && c != '\0')
-    {
-        if (expand_buffer(buffer, *buffer_size, buffer_capacity) == -1)
-        {
-            free(*buffer);
-            return (-1);
-        }
-        (*buffer)[*buffer_size] = c;
-        (*buffer_size)++;
-        r = read_character(&c);
-    }
-
-    return r;
+	r = read_character(&c);
+	while (r > 0 && c != '\n' && c != '\0')
+	{
+		if (expand_buffer(buffer, *buffer_size, buffer_capacity) == -1)
+		{
+			free(*buffer);
+			return (-1);
+		}
+		(*buffer)[*buffer_size] = c;
+		(*buffer_size)++;
+		r = read_character(&c);
+	}
+	return (r);
 }
 
-static void append_newline(char **buffer, int *buffer_size)
+static void	append_newline(char **buffer, int *buffer_size)
 {
-    (*buffer)[*buffer_size] = '\n';
-    (*buffer_size)++;
-    (*buffer)[*buffer_size] = '\0';
+	(*buffer)[*buffer_size] = '\n';
+	(*buffer_size)++;
+	(*buffer)[*buffer_size] = '\0';
 }
 
-int get_next_line(char **line)
+int	get_next_line(char **line)
 {
-    char *buffer;
-    int buffer_size;
-    int buffer_capacity;
-    int r;
+	char	*buffer;
+	int		buffer_size;
+	int		buffer_capacity;
+	int		r;
 
-    buffer = NULL;
-    buffer_size = 0;
-    buffer_capacity = 0;
-
-    r = fill_buffer(&buffer, &buffer_size, &buffer_capacity);
-
-    if (r <= 0)
-        free(buffer);
-    else
-        append_newline(&buffer, &buffer_size);
-
-    *line = buffer;
-    return (r);
+	buffer = NULL;
+	buffer_size = 0;
+	buffer_capacity = 0;
+	r = fill_buffer(&buffer, &buffer_size, &buffer_capacity);
+	if (r <= 0)
+		free(buffer);
+	else
+		append_newline(&buffer, &buffer_size);
+	*line = buffer;
+	return (r);
 }
