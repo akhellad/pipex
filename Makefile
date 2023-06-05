@@ -6,7 +6,7 @@
 #    By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/01 15:40:17 by akhellad          #+#    #+#              #
-#    Updated: 2023/06/02 13:45:58 by akhellad         ###   ########.fr        #
+#    Updated: 2023/06/05 13:15:25 by akhellad         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,8 +41,8 @@ bonus:		${NAME_B}
 
 ${NAME_B}:	${OBJS_B}
 					@make re -C ./libft
-					@echo "\033[0;34m[OK] \033[0m       \033[0;33m Created  \033[0m: ${NAME}" 
-					@$(CC) ${OBJS_B} -Llibft -lft -o ${NAME}
+					@echo "\033[0;34m[OK] \033[0m       \033[0;33m Created  \033[0m: ${NAME_B}" 
+					@$(CC) ${OBJS_B} -Llibft -lft -o ${NAME_B}
 
 clean:
 					@echo "\033[0;31m[OK] \033[0m       \033[0;33m Deleted  \033[0m: ${OBJS}"

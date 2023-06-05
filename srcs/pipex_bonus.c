@@ -6,13 +6,13 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 13:20:09 by akhellad          #+#    #+#             */
-/*   Updated: 2023/06/02 15:27:35 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:33:04 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void	child_process(int pipe_fd[2], char argv[], char **envp)
+pid_t	child_process(int pipe_fd[2], char argv[], char **envp)
 {
 	pid_t	pid;
 
@@ -29,6 +29,7 @@ void	child_process(int pipe_fd[2], char argv[], char **envp)
 		execute(argv, envp);
 		exit(0);
 	}
+	return (pid);
 }
 
 void	here_doc(char *limiter, int argc)
@@ -60,27 +61,49 @@ void	here_doc(char *limiter, int argc)
 	}
 }
 
+void	wait_process(int pipe_fd[2], pid_t *child_pids, int child_count)
+{
+	int	j;
+
+	j = 0;
+	while (j < child_count)
+	{
+		waitpid(child_pids[j], NULL, 0);
+		j++;
+	}
+	close(pipe_fd[1]);
+	dup2(pipe_fd[0], STDIN_FILENO);
+	close(pipe_fd[0]);
+	free(child_pids);
+}
+
 void	pipe_process(int i, int argc, char **argv, char **envp)
 {
-	int	pipe_fd[2];
-	int	fileout;
+	int		pipe_fd[2];
+	int		fileout;
+	int		child_count;
+	pid_t	*child_pids;
+	int		j;
 
+	child_count = argc - i - 2;
 	if (pipe(pipe_fd) == -1)
 	{
 		perror("pipe");
 		exit(1);
 	}
 	fileout = open_file(argv[argc - 1], 1);
-	dup2(fileout, STDOUT_FILENO);
-	while (i < argc - 2)
+	child_pids = malloc(child_count * sizeof(pid_t));
+	j = 0;
+	while (j < child_count)
 	{
-		child_process(pipe_fd, argv[i], envp);
+		child_pids[j] = child_process(pipe_fd, argv[i], envp);
 		i++;
+		j++;
 	}
-	close(pipe_fd[1]);
-	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);
-	execute(argv[argc - 2], envp);
+	dup2(fileout, STDOUT_FILENO);
+	close(fileout);
+	wait_process(pipe_fd, child_pids, child_count);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -103,5 +126,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		pipe_process(i, argc, argv, envp);
 	}
-	usage();
+	else
+		usage();
 }
